@@ -9,12 +9,26 @@
 			--ink: #202521;
 			--muted: #7b817b;
 			--paper: #f8f6f0;
+			--paper-strong: #f1efe9;
 			--white: #fffdf9;
 			--line: #e5e2d9;
 			--sage: #6f8768;
 			--sage-dark: #3f5c40;
 			--coral: #df755d;
 			--shadow: 0 18px 45px rgba(52, 62, 51, 0.1);
+		}
+
+		body.dark {
+			--ink: #edf3ec;
+			--muted: #acb9ae;
+			--paper: #171d1a;
+			--paper-strong: #1f2924;
+			--white: #1d2723;
+			--line: rgba(191, 204, 191, 0.14);
+			--sage: #91b094;
+			--sage-dark: #cfe7d0;
+			--coral: #f09a7d;
+			--shadow: 0 18px 45px rgba(8, 12, 10, 0.45);
 		}
 
 		* { box-sizing: border-box; }
@@ -39,7 +53,162 @@
 			padding: 48px 0 72px;
 		}
 
-		header {
+		.topbar {
+			position: sticky;
+			top: 12px;
+			z-index: 20;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 18px;
+			width: min(100% - 32px, 960px);
+			margin: 20px auto 0;
+			padding: 12px 18px;
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			background: rgba(255, 253, 249, 0.78);
+			backdrop-filter: blur(10px);
+			box-shadow: 0 12px 30px rgba(52, 62, 51, 0.06);
+		}
+
+		body.dark .topbar {
+			background: rgba(26, 34, 30, 0.75);
+		}
+
+		.brand-wrap {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			min-width: 0;
+		}
+
+		.brand-mark {
+			display: grid;
+			place-items: center;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			color: var(--white);
+			background: linear-gradient(135deg, var(--sage-dark), var(--sage));
+			font: 700 0.9rem Arial, sans-serif;
+		}
+
+		.brand-name {
+			color: var(--ink);
+			font: 700 0.98rem Arial, sans-serif;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		.nav-links {
+			display: flex;
+			align-items: center;
+			gap: 18px;
+			flex-wrap: wrap;
+			justify-content: center;
+		}
+
+		.nav-links a {
+			color: var(--muted);
+			font: 700 0.76rem Arial, sans-serif;
+			letter-spacing: 0.08em;
+			text-decoration: none;
+			text-transform: uppercase;
+			transition: color 160ms ease;
+		}
+
+		.nav-links a:hover,
+		.nav-links a.active {
+			color: var(--sage-dark);
+		}
+
+		.nav-actions {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.menu-button,
+		.theme-toggle,
+		.nav-cta {
+			border: 1px solid var(--line);
+			border-radius: 999px;
+			background: var(--white);
+			color: var(--ink);
+			font: 700 0.72rem Arial, sans-serif;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+			transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+		}
+
+		.menu-button,
+		.theme-toggle {
+			padding: 9px 12px;
+		}
+
+		.menu-button {
+			position: relative;
+		}
+
+		.menu-button:hover,
+		.theme-toggle:hover,
+		.nav-cta:hover {
+			transform: translateY(-1px);
+			border-color: rgba(111, 135, 104, 0.5);
+		}
+
+		.menu-dropdown {
+			position: absolute;
+			top: calc(100% + 10px);
+			right: 0;
+			display: none;
+			min-width: 170px;
+			padding: 8px;
+			border: 1px solid var(--line);
+			border-radius: 18px;
+			background: var(--white);
+			box-shadow: var(--shadow);
+		}
+
+		.menu-button[aria-expanded="true"] + .menu-dropdown {
+			display: block;
+		}
+
+		.menu-dropdown a {
+			display: block;
+			padding: 10px 12px;
+			border-radius: 10px;
+			color: var(--ink);
+			font: 600 0.76rem Arial, sans-serif;
+			letter-spacing: 0.04em;
+			text-decoration: none;
+			text-transform: none;
+		}
+
+		.menu-dropdown a:hover {
+			background: var(--paper-strong);
+			color: var(--sage-dark);
+		}
+
+		.theme-toggle {
+			width: 42px;
+			height: 42px;
+			padding: 0;
+			line-height: 1;
+		}
+
+		.nav-cta {
+			border: 0;
+			border-radius: 999px;
+			padding: 10px 16px;
+			color: var(--white);
+			background: linear-gradient(135deg, var(--coral), #d5876f);
+			font: 700 0.75rem Arial, sans-serif;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		.hero {
 			display: flex;
 			align-items: end;
 			justify-content: space-between;
@@ -239,7 +408,16 @@
 
 		@media (max-width: 700px) {
 			.shell { width: min(100% - 22px, 560px); padding-top: 28px; }
-			header { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+			.topbar {
+				width: min(100% - 18px, 560px);
+				padding: 10px 12px;
+				border-radius: 20px;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+			.nav-links { order: 3; width: 100%; }
+			.nav-cta { flex: 1 1 auto; }
+			.hero { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 22px; }
 			.date { text-align: left; }
 			.board { grid-template-columns: 1fr; gap: 24px; padding: 19px 16px 24px; }
 			aside { border-top: 1px solid var(--line); border-left: 0; padding: 24px 0 0; }
@@ -251,8 +429,32 @@
 	</style>
 </head>
 <body>
-	<main class="shell">
-		<header>
+	<nav class="topbar" aria-label="Main navigation">
+		<div class="brand-wrap">
+			<div class="brand-mark">T</div>
+			<span class="brand-name">Today</span>
+		</div>
+		<div class="nav-links">
+			<a href="#top" class="active">Overview</a>
+			<a href="#task-list">Tasks</a>
+			<a href="#progress-number">Progress</a>
+		</div>
+		<div class="nav-actions">
+			<div style="position: relative;">
+				<button class="menu-button" type="button" aria-expanded="false" aria-label="Open menu">Menu</button>
+				<div class="menu-dropdown" aria-label="Quick links menu">
+					<a href="#top">Today list</a>
+					<a href="#task-list">Task board</a>
+					<a href="#progress-number">Progress</a>
+				</div>
+			</div>
+			<button class="theme-toggle" type="button" aria-label="Toggle dark mode">☾</button>
+			<button class="nav-cta" type="button">Quick add</button>
+		</div>
+	</nav>
+
+	<main class="shell" id="top">
+		<header class="hero">
 			<div>
 				<p class="eyebrow">A little order</p>
 				<h1>Today.</h1>
@@ -298,6 +500,10 @@
 		const remaining = document.querySelector("#remaining");
 		const progressNumber = document.querySelector("#progress-number");
 		const progressBar = document.querySelector("#progress-bar");
+		const quickAddButton = document.querySelector(".nav-cta");
+		const themeToggle = document.querySelector(".theme-toggle");
+		const menuButton = document.querySelector(".menu-button");
+		const menuDropdown = document.querySelector(".menu-dropdown");
 
 		document.querySelector("#today").textContent = new Intl.DateTimeFormat("en", {
 			weekday: "long", month: "long", day: "numeric", year: "numeric"
@@ -366,6 +572,28 @@
 				document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item === button));
 				render();
 			});
+		});
+
+		quickAddButton.addEventListener("click", () => {
+			input.focus();
+			input.scrollIntoView({ behavior: "smooth", block: "center" });
+		});
+
+		themeToggle.addEventListener("click", () => {
+			document.body.classList.toggle("dark");
+			themeToggle.textContent = document.body.classList.contains("dark") ? "☀" : "☾";
+			themeToggle.setAttribute("aria-label", document.body.classList.contains("dark") ? "Switch to light mode" : "Switch to dark mode");
+		});
+
+		menuButton.addEventListener("click", () => {
+			const expanded = menuButton.getAttribute("aria-expanded") === "true";
+			menuButton.setAttribute("aria-expanded", String(!expanded));
+		});
+
+		document.addEventListener("click", (event) => {
+			if (!menuButton.contains(event.target) && !menuDropdown.contains(event.target)) {
+				menuButton.setAttribute("aria-expanded", "false");
+			}
 		});
 
 		render();
