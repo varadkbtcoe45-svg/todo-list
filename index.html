@@ -27,6 +27,7 @@
 			font-family: Georgia, "Times New Roman", serif;
 			background-image: radial-gradient(#d9ddd2 0.7px, transparent 0.7px);
 			background-size: 18px 18px;
+			animation: page-in 600ms ease both;
 		}
 
 		button, input { font: inherit; }
@@ -143,6 +144,7 @@
 			height: 2px;
 			background: var(--sage);
 			content: "";
+			animation: underline-in 180ms ease both;
 		}
 
 		.remaining { color: var(--muted); font: 0.75rem Arial, sans-serif; }
@@ -158,6 +160,12 @@
 			border-bottom: 1px solid var(--line);
 			animation: appear 220ms ease both;
 		}
+
+		.task:nth-child(2) { animation-delay: 45ms; }
+		.task:nth-child(3) { animation-delay: 90ms; }
+		.task:nth-child(4) { animation-delay: 135ms; }
+		.task:nth-child(5) { animation-delay: 180ms; }
+		.task:nth-child(6) { animation-delay: 225ms; }
 
 		.check {
 			display: grid;
@@ -206,7 +214,28 @@
 		.quote { margin: 42px 0 0; color: var(--muted); font-size: 1.05rem; line-height: 1.5; }
 		.quote::before { display: block; margin-bottom: 12px; color: var(--coral); content: "“"; font-size: 3rem; line-height: 0.5; }
 
-		@keyframes appear { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+		@keyframes page-in {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+
+		@keyframes appear {
+			from { opacity: 0; transform: translateY(8px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		@keyframes underline-in {
+			from { transform: scaleX(0); transform-origin: left; }
+			to { transform: scaleX(1); transform-origin: left; }
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after {
+				animation-duration: 0.01ms !important;
+				animation-iteration-count: 1 !important;
+				transition-duration: 0.01ms !important;
+			}
+		}
 
 		@media (max-width: 700px) {
 			.shell { width: min(100% - 22px, 560px); padding-top: 28px; }
