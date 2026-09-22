@@ -1,45 +1,53 @@
-# Today Todo List
+# Today — Minimal Todo List
 
-A simple, responsive todo list built as a single HTML page. It helps you capture tasks, track progress, and keep a small daily list organized.
+A polished, single-page productivity app designed to keep your day organized with a clean editorial aesthetic, quick actions, and a modern navigation bar.
 
-## Features
+This project combines a focused task manager with a premium dashboard feel, making it easy to add, manage, and complete tasks without any external libraries or setup.
 
-- Add new tasks
-- Mark tasks as complete or open
-- Delete tasks
-- Filter tasks by all, open, or done
-- View remaining task count and completion percentage
-- Persist tasks in browser `localStorage`
+## Highlights
+
+- Add and remove tasks in seconds
+- Mark work complete or reopen it anytime
+- Filter by All, Open, or Done
+- Track progress with a live completion percentage
+- See how many tasks remain at a glance
+- Persistent task storage using browser `localStorage`
 - Responsive layout for desktop and mobile screens
-- No build tools or external dependencies
+- Modern sticky header with menu, theme toggle, and quick-add action
 
-## Run Locally
+## Preview
 
-Open `index.html` in a web browser.
+Open `index.html` in a browser to use the app locally.
 
-You can also use the **Five Server** or **Live Server** extension in VS Code for automatic browser refresh while editing.
+You can also run it with the **Five Server** or **Live Server** extension in VS Code for auto-refresh while editing.
 
-## Usage
+## How to Use
 
-1. Enter a task in the input field.
-2. Select **Add task** or press Enter.
-3. Select the circle beside a task to mark it complete.
-4. Use **All**, **Open**, or **Done** to filter the list.
-5. Select the `x` button to remove a task.
+1. Type a task into the input field.
+2. Click **Add task** or press Enter.
+3. Use the circular checkbox to mark tasks as done.
+4. Filter tasks using the tabs at the top of the list.
+5. Remove tasks with the close button on each item.
+6. Use the navbar actions to access quick navigation and theme switching.
 
-Tasks are stored locally in the browser for this page. Clearing the browser's site data removes the saved tasks.
+Tasks are saved in the browser, so they remain available even after refreshes unless site data is cleared.
 
 ## Project Structure
 
 ```text
 todo-list/
 ├── index.html
-└── README.md
+├── README.md
+└── assets/   (optional future expansion)
 ```
 
-## Technology
+## Tech Stack
 
 - HTML
 - CSS
 - Vanilla JavaScript
-- Browser `localStorage` API
+- Browser `localStorage`
+
+## Product Feel
+
+The page is designed to feel more like a modern productivity dashboard than a basic checklist, with soft warm tones, rounded controls, layered surfaces, and a refined navigation experience.
