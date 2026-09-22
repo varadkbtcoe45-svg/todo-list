@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Today | Todo list</title>
+	<style>
+		:root {
+			--ink: #202521;
+			--muted: #7b817b;
+			--paper: #f8f6f0;
+			--white: #fffdf9;
+			--line: #e5e2d9;
+			--sage: #6f8768;
+			--sage-dark: #3f5c40;
+			--coral: #df755d;
+			--shadow: 0 18px 45px rgba(52, 62, 51, 0.1);
+		}
+
+		* { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			min-height: 100vh;
+			color: var(--ink);
+			background: var(--paper);
+			font-family: Georgia, "Times New Roman", serif;
+			background-image: radial-gradient(#d9ddd2 0.7px, transparent 0.7px);
+			background-size: 18px 18px;
+		}
+
+		button, input { font: inherit; }
+		button { cursor: pointer; }
+
+		.shell {
+			width: min(100% - 32px, 960px);
+			margin: 0 auto;
+			padding: 48px 0 72px;
+		}
+
+		header {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 24px;
+			margin-bottom: 30px;
+		}
+
+		.eyebrow {
+			margin: 0 0 10px;
+			color: var(--coral);
+			font: 700 0.75rem/1.2 Arial, sans-serif;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: clamp(2.5rem, 7vw, 5rem);
+			font-weight: 400;
+			line-height: 0.95;
+			letter-spacing: -0.04em;
+		}
+
+		.date {
+			margin: 0 0 5px;
+			color: var(--muted);
+			font: 0.9rem/1.4 Arial, sans-serif;
+			text-align: right;
+		}
+
+		.board {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) 240px;
+			gap: 28px;
+			padding: 28px;
+			border: 1px solid rgba(229, 226, 217, 0.8);
+			border-radius: 6px;
+			background: rgba(255, 253, 249, 0.88);
+			box-shadow: var(--shadow);
+		}
+
+		.composer {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 24px;
+		}
+
+		.composer input {
+			width: 100%;
+			min-width: 0;
+			padding: 15px 16px;
+			border: 1px solid var(--line);
+			border-radius: 4px;
+			outline: 0;
+			color: var(--ink);
+			background: var(--white);
+			font-family: Arial, sans-serif;
+			transition: border-color 160ms ease, box-shadow 160ms ease;
+		}
+
+		.composer input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(111, 135, 104, 0.16); }
+
+		.add-button {
+			flex: 0 0 auto;
+			border: 0;
+			border-radius: 4px;
+			padding: 0 21px;
+			color: #fff;
+			background: var(--sage-dark);
+			font: 700 0.88rem Arial, sans-serif;
+			transition: background 160ms ease, transform 160ms ease;
+		}
+
+		.add-button:hover { background: #304a32; transform: translateY(-1px); }
+
+		.filters {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			margin-bottom: 12px;
+			border-bottom: 1px solid var(--line);
+		}
+
+		.filter-list { display: flex; gap: 18px; }
+
+		.filter {
+			position: relative;
+			border: 0;
+			padding: 0 0 12px;
+			color: var(--muted);
+			background: transparent;
+			font: 700 0.76rem Arial, sans-serif;
+		}
+
+		.filter.active { color: var(--sage-dark); }
+		.filter.active::after {
+			position: absolute;
+			right: 0;
+			bottom: -1px;
+			left: 0;
+			height: 2px;
+			background: var(--sage);
+			content: "";
+		}
+
+		.remaining { color: var(--muted); font: 0.75rem Arial, sans-serif; }
+
+		.task-list { display: grid; gap: 3px; }
+
+		.task {
+			display: flex;
+			align-items: center;
+			gap: 13px;
+			min-height: 61px;
+			padding: 10px 4px;
+			border-bottom: 1px solid var(--line);
+			animation: appear 220ms ease both;
+		}
+
+		.check {
+			display: grid;
+			flex: 0 0 22px;
+			width: 22px;
+			height: 22px;
+			place-items: center;
+			border: 1.5px solid #b9c1b5;
+			border-radius: 50%;
+			color: white;
+			background: transparent;
+			font: 700 0.75rem Arial, sans-serif;
+			transition: background 160ms ease, border-color 160ms ease;
+		}
+
+		.check:hover { border-color: var(--sage); }
+		.task.done .check { border-color: var(--sage); background: var(--sage); }
+		.task-text { flex: 1; font-size: 1.05rem; line-height: 1.4; }
+		.task.done .task-text { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+
+		.delete {
+			border: 0;
+			padding: 5px 7px;
+			color: #b5b8b0;
+			background: transparent;
+			font: 1.15rem Arial, sans-serif;
+			opacity: 0;
+			transition: color 160ms ease, opacity 160ms ease;
+		}
+
+		.task:hover .delete, .delete:focus { opacity: 1; }
+		.delete:hover { color: var(--coral); }
+
+		.empty {
+			padding: 52px 12px;
+			color: var(--muted);
+			text-align: center;
+			font-style: italic;
+		}
+
+		aside { border-left: 1px solid var(--line); padding-left: 28px; }
+		.summary-label { margin: 2px 0 8px; color: var(--muted); font: 700 0.72rem Arial, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; }
+		.summary-number { margin: 0 0 24px; color: var(--sage-dark); font-size: 4.5rem; line-height: 0.9; }
+		.progress-track { height: 6px; overflow: hidden; border-radius: 10px; background: #e7eae1; }
+		.progress-bar { width: 0%; height: 100%; background: var(--coral); transition: width 300ms ease; }
+		.quote { margin: 42px 0 0; color: var(--muted); font-size: 1.05rem; line-height: 1.5; }
+		.quote::before { display: block; margin-bottom: 12px; color: var(--coral); content: "“"; font-size: 3rem; line-height: 0.5; }
+
+		@keyframes appear { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+		@media (max-width: 700px) {
+			.shell { width: min(100% - 22px, 560px); padding-top: 28px; }
+			header { align-items: start; flex-direction: column; gap: 12px; margin-bottom: 22px; }
+			.date { text-align: left; }
+			.board { grid-template-columns: 1fr; gap: 24px; padding: 19px 16px 24px; }
+			aside { border-top: 1px solid var(--line); border-left: 0; padding: 24px 0 0; }
+			.summary-number { margin-bottom: 16px; }
+			.quote { display: none; }
+			.delete { opacity: 1; }
+			.add-button { padding: 0 15px; }
+		}
+	</style>
+</head>
+<body>
+	<main class="shell">
+		<header>
+			<div>
+				<p class="eyebrow">A little order</p>
+				<h1>Today.</h1>
+			</div>
+			<p class="date" id="today"></p>
+		</header>
+
+		<section class="board" aria-label="Todo list">
+			<div>
+				<form class="composer" id="todo-form">
+					<input id="todo-input" type="text" maxlength="120" autocomplete="off" placeholder="What needs doing?" aria-label="New task" />
+					<button class="add-button" type="submit">Add task</button>
+				</form>
+
+				<div class="filters">
+					<div class="filter-list" role="tablist" aria-label="Task filters">
+						<button class="filter active" type="button" data-filter="all">All</button>
+						<button class="filter" type="button" data-filter="active">Open</button>
+						<button class="filter" type="button" data-filter="completed">Done</button>
+					</div>
+					<span class="remaining" id="remaining"></span>
+				</div>
+				<div class="task-list" id="task-list"></div>
+			</div>
+
+			<aside>
+				<p class="summary-label">Progress</p>
+				<p class="summary-number" id="progress-number">0%</p>
+				<div class="progress-track" aria-label="Task completion progress"><div class="progress-bar" id="progress-bar"></div></div>
+				<p class="quote">Small steps still move the day forward.</p>
+			</aside>
+		</section>
+	</main>
+
+	<script>
+		const storageKey = "today-todos";
+		let tasks = JSON.parse(localStorage.getItem(storageKey) || "[]");
+		let currentFilter = "all";
+
+		const taskList = document.querySelector("#task-list");
+		const form = document.querySelector("#todo-form");
+		const input = document.querySelector("#todo-input");
+		const remaining = document.querySelector("#remaining");
+		const progressNumber = document.querySelector("#progress-number");
+		const progressBar = document.querySelector("#progress-bar");
+
+		document.querySelector("#today").textContent = new Intl.DateTimeFormat("en", {
+			weekday: "long", month: "long", day: "numeric", year: "numeric"
+		}).format(new Date());
+
+		function saveTasks() {
+			localStorage.setItem(storageKey, JSON.stringify(tasks));
+		}
+
+		function render() {
+			const visibleTasks = tasks.filter((task) => {
+				if (currentFilter === "active") return !task.done;
+				if (currentFilter === "completed") return task.done;
+				return true;
+			});
+
+			taskList.innerHTML = visibleTasks.length ? visibleTasks.map((task) => `
+				<article class="task ${task.done ? "done" : ""}" data-id="${task.id}">
+					<button class="check" type="button" aria-label="${task.done ? "Mark task open" : "Complete task"}">${task.done ? "✓" : ""}</button>
+					<span class="task-text">${escapeHtml(task.text)}</span>
+					<button class="delete" type="button" aria-label="Delete task">×</button>
+				</article>
+			`).join("") : `<p class="empty">${currentFilter === "all" ? "Nothing here yet. Add a task to begin." : "No tasks in this view."}</p>`;
+
+			const openTasks = tasks.filter((task) => !task.done).length;
+			const completedTasks = tasks.length - openTasks;
+			const percentage = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0;
+			remaining.textContent = `${openTasks} ${openTasks === 1 ? "task" : "tasks"} left`;
+			progressNumber.textContent = `${percentage}%`;
+			progressBar.style.width = `${percentage}%`;
+		}
+
+		function escapeHtml(text) {
+			return text.replace(/[&<>'"]/g, (character) => ({
+				"&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;"
+			}[character]));
+		}
+
+		form.addEventListener("submit", (event) => {
+			event.preventDefault();
+			const text = input.value.trim();
+			if (!text) return input.focus();
+			tasks.unshift({ id: Date.now(), text, done: false });
+			saveTasks();
+			input.value = "";
+			render();
+			input.focus();
+		});
+
+		taskList.addEventListener("click", (event) => {
+			const taskElement = event.target.closest(".task");
+			if (!taskElement) return;
+			const taskId = Number(taskElement.dataset.id);
+			if (event.target.closest(".check")) {
+				tasks = tasks.map((task) => task.id === taskId ? { ...task, done: !task.done } : task);
+			} else if (event.target.closest(".delete")) {
+				tasks = tasks.filter((task) => task.id !== taskId);
+			} else return;
+			saveTasks();
+			render();
+		});
+
+		document.querySelectorAll(".filter").forEach((button) => {
+			button.addEventListener("click", () => {
+				currentFilter = button.dataset.filter;
+				document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item === button));
+				render();
+			});
+		});
+
+		render();
+	</script>
+</body>
+</html>
